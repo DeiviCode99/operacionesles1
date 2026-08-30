@@ -1,9 +1,58 @@
+def convert_to_binary(num):
+
+    # Conversión a binario
+    numero = num
+    binary = format(numero, 'b')
+
+    # Representación de 8 bits
+    num_digits = len(binary)
+    if num_digits < 8:
+        byte_rep = binary.zfill(8)
+    else:
+        byte_rep = binary
+
+    # Representación hexadecimal
+    hexadecimal = format(numero, 'x')
+
+    print(f"Numero decimal: {numero}")
+    print(f"Representeanción binario: {binary}")
+    print(f"Representación en 8 bits: {byte_rep}")
+    print(f"Representación hexadecimal: {hexadecimal}")
+    
+    return
+
+def ascii_table(texto):
+    print("Carácter     Decimal     Hexadecimal     Binario")
+    print("---------------------------------------------------")
+    for i in range(len(texto)):
+        letter = texto[0+i]
+        decimal_letter = ord(letter)
+        hex_letter = format(decimal_letter, 'x')
+        binary_letter = format(decimal_letter, 'b')
+        print(f"{letter}            {decimal_letter}            {hex_letter}            {binary_letter}")
+
+
+    print("\n")
+    # Tamaño del archivo
+    bytes_texto = len(texto.encode('UTF-8'))
+    print(f"Tamaño en bytes del archivo es: {bytes_texto}")
+    print(f"Tamaño en bits del aarchivo: {bytes_texto * len(texto)*2}")
+    return
+
 from pathlib import Path
 import os
 import mimetypes
 import re
+import tkinter as tk
+from tkinter.filedialog import askopenfilename
 
-def detective(ruta: str | Path):
+ruta = ""
+description = ""
+hipotesis = ""
+
+def detective():
+    global ruta
+    ruta = askopenfilename(title="Selecciona el archivo a analizar")
     doc_name = Path(ruta).name
     doc_name = doc_name.split('.')[0]
     bytes_size = os.path.getsize(ruta)
@@ -65,5 +114,3 @@ def detective(ruta: str | Path):
     print(f"HIPÓTESIS:\n{hipotesis}\n")
     print(f"VERIFICACIÓN:\nLa extensión original fue .dat pero el analisis de cu contenido indica que corresponde a una imagen{type_doc}")
     return
-
-resultado = detective(ruta="IchigoKurosakiBleach.dat")
