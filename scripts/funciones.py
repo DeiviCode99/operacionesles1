@@ -14,45 +14,38 @@ def convert_to_binary(num):
     # Representación hexadecimal
     hexadecimal = format(numero, 'x')
 
-    print(f"Numero decimal: {numero}")
-    print(f"Representeanción binario: {binary}")
-    print(f"Representación en 8 bits: {byte_rep}")
-    print(f"Representación hexadecimal: {hexadecimal}")
+    resultado = ""
+    resultado += f"Numero decimal: {numero}\n"
+    resultado += f"Representación binario: {binary}\n"
+    resultado += f"Representación en 8 bits: {byte_rep}\n"
+    resultado += f"Representación hexadecimal: {hexadecimal}\n"
     
-    return
+    return resultado
 
 def ascii_table(texto):
-    print("Carácter     Decimal     Hexadecimal     Binario")
-    print("---------------------------------------------------")
+    resultado = "Carácter     Decimal     Hexadecimal     Binario\n"
+    resultado += "---------------------------------------------------\n"
     for i in range(len(texto)):
-        letter = texto[0+i]
+        letter = texto[i]
         decimal_letter = ord(letter)
         hex_letter = format(decimal_letter, 'x')
         binary_letter = format(decimal_letter, 'b')
-        print(f"{letter}            {decimal_letter}            {hex_letter}            {binary_letter}")
+        resultado += f"{letter}            {decimal_letter}            {hex_letter}            {binary_letter}\n"
 
 
-    print("\n")
+    resultado += "\n"
     # Tamaño del archivo
     bytes_texto = len(texto.encode('UTF-8'))
-    print(f"Tamaño en bytes del archivo es: {bytes_texto}")
-    print(f"Tamaño en bits del aarchivo: {bytes_texto * len(texto)*2}")
-    return
+    resultado += f"Tamano en bytes del archivo es: {bytes_texto}\n"
+    resultado += f"Tamanio en bits del archivo: {bytes_texto * 8}\n"
+    return resultado
 
 from pathlib import Path
 import os
 import mimetypes
 import re
-import tkinter as tk
-from tkinter.filedialog import askopenfilename
 
-ruta = ""
-description = ""
-hipotesis = ""
-
-def detective():
-    global ruta
-    ruta = askopenfilename(title="Selecciona el archivo a analizar")
+def detective(ruta):
     doc_name = Path(ruta).name
     doc_name = doc_name.split('.')[0]
     bytes_size = os.path.getsize(ruta)
@@ -64,7 +57,9 @@ def detective():
     hex_firm = firts_bytes.hex()
     hex_firm = " ".join(re.findall(r".{1,2}", hex_firm))
 
-    # 3. Detectar el tipo real comparando los Magic Numbers
+    description = ""
+    hipotesis = ""
+
     if firts_bytes.startswith(b'%PDF'):
         type_doc = "PDF"
         description = "Los primeros bytes coinciden con la firma característica de un archivo en formato PDF."
@@ -106,11 +101,13 @@ def detective():
         except UnicodeDecodeError:
             type_doc = "Binario Desconocido o Datos Propietarios (.dat puro)"
 
-    print(f"Analizando archivo: {doc_name}.dat\n")
-    print(f"Tamaño:\n{bytes_size} bytes\n")
-    print(f"Tipo detectado:\n.{type_doc}\n")
-    print(f"Primeros bytes en hexadcimal:\n{hex_firm.upper()}\n")
-    print(f"EVIDENCIA ENCONTRADA:\n{description}\n")
-    print(f"HIPÓTESIS:\n{hipotesis}\n")
-    print(f"VERIFICACIÓN:\nLa extensión original fue .dat pero el analisis de cu contenido indica que corresponde a una imagen{type_doc}")
-    return
+    resultado = ""
+    resultado += f"Analizando archivo: {doc_name}.dat\n"
+    resultado += f"Tamaño:\n{bytes_size} bytes\n"
+    resultado += f"Tipo detectado:\n.{type_doc}\n"
+    resultado += f"Primeros bytes en hexadcimal:\n{hex_firm.upper()}\n"
+    resultado += f"EVIDENCIA ENCONTRADA:\n{description}\n"
+    resultado +=f"HIPÓTESIS:\n{hipotesis}\n"
+    resultado += f"VERIFICACIÓN:\nLa extensión original fue .dat pero el analisis de cu contenido indica que corresponde a una imagen{type_doc}"
+
+    return resultado
