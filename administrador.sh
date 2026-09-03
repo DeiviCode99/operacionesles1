@@ -108,10 +108,70 @@ while true; do
 
 		    echo ""
 		    read -p "Presione ENTER para continuar..."
-		    ;;
-	  
+		    ;;	  
 	3)
-		;;
+	            while true; do
+	                echo "========================================="
+	                echo "       ADMINISTRACIÓN DE PROCESOS"
+	                echo "========================================="
+	                echo "1. Listar procesos activos"
+	                echo "2. Buscar proceso por nombre"
+	                echo "3. Mostrar procesos con mayor uso de CPU"
+	                echo "0. Volver al menú principal"
+	                echo "========================================="
+
+	                read -p "Seleccione una opción: " proceso_opcion
+	                echo ""
+
+	                case $proceso_opcion in
+
+	                    1)
+	                        echo "========================================="
+	                        echo "          PROCESOS ACTIVOS"
+	                        echo "========================================="
+
+	                        ps aux
+
+	                        echo ""
+	                        read -p "Presione ENTER para continuar..."
+	                        ;;
+
+	                    2)
+	                        read -p "Ingrese el nombre del proceso: " nombre_proceso
+
+	                        echo ""
+	                        echo "Procesos encontrados:"
+	                        echo "-----------------------------------------"
+
+	                        ps aux | grep -i "$nombre_proceso" | grep -v grep
+
+	                        echo ""
+	                        read -p "Presione ENTER para continuar..."
+	                        ;;
+
+	                    3)
+	                        echo "========================================="
+	                        echo "    PROCESOS CON MAYOR USO DE CPU"
+	                        echo "========================================="
+
+	                        ps aux --sort=-%cpu | head -n 11
+
+	                        echo ""
+	                        read -p "Presione ENTER para continuar..."
+	                        ;;
+
+	                    0)
+	                        break
+	                        ;;
+
+	                    *)
+	                        echo "Opción no válida."
+	                        read -p "Presione ENTER para continuar..."
+	                        ;;
+
+	                esac
+	            done
+	            ;;
 	4)
 		;;
 	5)
