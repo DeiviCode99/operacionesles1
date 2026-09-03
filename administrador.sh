@@ -33,8 +33,83 @@ while true; do
 		read -p "Presione Enter para continuar..."
 		;;
 	2)
-		echo ""
-		;;
+		    echo "========================================="
+		    echo "       ESTADO DE MEMORIA Y DISCO"
+		    echo "========================================="
+
+		    echo "MEMORIA"
+		    echo "-----------------------------------------"
+
+		   # Memoria en GB
+		    memoria_total=$(free -b | awk '/Mem:/ {
+		        printf "%.1f", $2/1000000000
+		    }')
+
+		    memoria_usada=$(free -b | awk '/Mem:/ {
+		        printf "%.1f", $3/1000000000
+		    }')
+
+		    memoria_disponible=$(free -b | awk '/Mem:/ {
+		        printf "%.1f", $7/1000000000
+		    }')
+
+		    # Porcentaje de memoria utilizada
+		    memoria_porcentaje=$(free | awk '/Mem:/ {
+		        printf "%.0f", ($3/$2)*100
+		    }')
+
+		    echo "Memoria total: ${memoria_total} GB"
+		    echo "Memoria utilizada: ${memoria_usada} GB"
+		    echo "Memoria disponible: ${memoria_disponible} GB"
+		    echo "Uso de memoria: ${memoria_porcentaje}%"
+
+		    if [ "$memoria_porcentaje" -lt 85 ]; then
+		        echo "Estado: OK"
+		    else
+		        echo "Estado: ADVERTENCIA"
+		    fi
+
+		    echo ""
+		    echo "DISCO"
+		    echo "-----------------------------------------"
+
+		    # Disco en GB
+		    disco_total=$(df -B1 / | awk 'NR==2 {
+		        printf "%.1f", $2/1000000000
+		    }')
+
+		    disco_usado=$(df -B1 / | awk 'NR==2 {
+		        printf "%.1f", $3/1000000000
+		    }')
+
+		    disco_disponible=$(df -B1 / | awk 'NR==2 {
+		        printf "%.1f", $4/1000000000
+		    }')
+
+		    disco_porcentaje=$(df / | awk 'NR==2 {print $5}' | tr -d '%')
+
+		    echo "Sistema: /"
+		    echo "Espacio total: ${disco_total} GB"
+		    echo "Espacio utilizado: ${disco_usado} GB"
+		    echo "Espacio disponible: ${disco_disponible} GB"
+		    echo "Uso del disco: ${disco_porcentaje}%"
+
+		    if [ "$disco_porcentaje" -lt 85 ]; then
+		        echo "Estado: OK"
+		    else
+		        echo "Estado: ADVERTENCIA"
+		    fi
+
+		    echo ""
+		    echo "SISTEMAS OPERACIONALES"
+		    echo "INGENIERÍA DE SISTEMAS – UIS"
+		    echo "2026-2"
+		    echo "Diseñado por: Andrés Benavides Arévalo"
+
+		    echo ""
+		    read -p "Presione ENTER para continuar..."
+		    ;;
+	  
 	3)
 		;;
 	4)
