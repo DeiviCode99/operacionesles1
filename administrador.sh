@@ -14,7 +14,7 @@ while true; do
     echo "6. Generar diagnóstico del sistema"
     echo "0. Salir"
     echo "========================================="
-    read -p "Selecciona una opción [1-4]: " opcion
+    read -p "Selecciona una opción [1-6]: " opcion
     echo ""
     case $opcion in 
 	1)
@@ -173,11 +173,207 @@ while true; do
 	            done
 	            ;;
 	4)
-		;;
+		while true; do
+		                echo "========================================="
+		                echo "             INFORMACIÓN DE RED"
+		                echo "========================================="
+		                echo "1. Mostrar interfaces y direcciones IP"
+		                echo "2. Mostrar puertos activos"
+		                echo "3. Realizar prueba de conectividad"
+		                echo "0. Volver"
+		                echo "========================================="
+
+		                read -p "Seleccione una opción: " red_opcion
+		                echo ""
+
+		                case $red_opcion in
+
+		                    1)
+		                        echo "========================================="
+		                        echo "     INTERFACES Y DIRECCIONES IP"
+		                        echo "========================================="
+
+		                        ip a
+
+		                        echo ""
+		                        read -p "Presione ENTER para continuar..."
+		                        ;;
+
+		                    2)
+		                        echo "========================================="
+		                        echo "          PUERTOS ACTIVOS"
+		                        echo "========================================="
+
+		                        ss -tuln
+
+		                        echo ""
+		                        read -p "Presione ENTER para continuar..."
+		                        ;;
+
+		                    3)
+		                        read -p "Ingrese el destino para la prueba [google.com]: " destino
+
+		                        # Si el usuario no escribe nada, usa google.com
+		                        if [ -z "$destino" ]; then
+		                            destino="google.com"
+		                        fi
+
+		                        echo ""
+		                        echo "Realizando prueba de conectividad hacia $destino..."
+		                        echo "-----------------------------------------"
+
+		                        ping -c 4 "$destino"
+
+		                        echo ""
+		                        read -p "Presione ENTER para continuar..."
+		                        ;;
+
+		                    0)
+		                        break
+		                        ;;
+
+		                    *)
+		                        echo "Opción no válida."
+		                        read -p "Presione ENTER para continuar..."
+		                        ;;
+
+		                esac
+		            done
+		            ;;
 	5)
-		;;
+	            echo "========================================="
+	            echo "          BÚSQUEDA DE ARCHIVOS"
+	            echo "========================================="
+
+	            read -p "Ingrese el directorio inicial: " directorio
+	            read -p "Ingrese el nombre o patrón: " patron
+
+	            echo ""
+	            echo "Buscando archivos..."
+	            echo "-----------------------------------------"
+
+	            # Verificar que el directorio exista
+	            if [ ! -d "$directorio" ]; then
+	                echo "Error: el directorio no existe."
+	            else
+	                resultados=$(find "$directorio" -type f -name "$patron" 2>/dev/null)
+
+	                if [ -z "$resultados" ]; then
+	                    echo "No se encontraron archivos."
+	                    total=0
+	                else
+	                    echo "Resultados encontrados:"
+	                    echo "$resultados"
+
+	                    total=$(echo "$resultados" | wc -l)
+	                fi
+
+	                echo ""
+	                echo "Total de archivos encontrados: $total"
+	            fi
+
+	            echo ""
+	            echo "SISTEMAS OPERACIONALES"
+	            echo "INGENIERÍA DE SISTEMAS – UIS"
+	            echo "2026-2"
+	            echo "Diseñado por: Andrés Benavides Arévalo"
+
+	            echo ""
+	            read -p "Presione ENTER para continuar..."
+	            ;;
 	6)
-		;;
+		    echo "========================================="
+	            echo "          DIAGNÓSTICO DEL SISTEMA"
+	            echo "========================================="
+	            echo "Analizando recursos del sistema..."
+	            echo ""
+
+	            # -----------------------------------------
+	            # DIAGNOSTICO DE MEMORIA
+	            # -----------------------------------------
+	            memoria_porcentaje=$(free | awk '/Mem:/ {
+	                printf "%.0f", ($3/$2)*100
+	            }')
+
+	            if [ "$memoria_porcentaje" -lt 85 ]; then
+	                echo "[OK] MEMORIA"
+	                echo "Uso actual: $memoria_porcentaje%"
+	                echo "La memoria se encuentra dentro de los límites establecidos."
+	            else
+	                echo "[ADVERTENCIA] MEMORIA"
+	                echo "Uso actual: $memoria_porcentaje%"
+	                echo "El uso de la memoria es superior al límite establecido: 85%."
+	            fi
+
+	            echo ""
+
+	            # -----------------------------------------
+	            # DIAGNOSTICO DE DISCO
+	            # -----------------------------------------
+	            disco_porcentaje=$(df / | awk 'NR==2 {print $5}' | tr -d '%')
+
+	            if [ "$disco_porcentaje" -le 85 ]; then
+	                echo "[OK] DISCO"
+	                echo "Uso actual: $disco_porcentaje%"
+	                echo "El uso del disco se encuentra dentro de los límites establecidos."
+	            else
+	                echo "[ADVERTENCIA] DISCO"
+	                echo "Uso actual: $disco_porcentaje%"
+	                echo "El uso del disco es superior al límite establecido: 85%."
+	            fi
+
+	            echo ""
+
+	            # -----------------------------------------
+	            # DIAGNOSTICO DE RED
+	            # -----------------------------------------
+	            echo "Comprobando conectividad..."
+
+	            if ping -c 2 -W 2 google.com > /dev/null 2>&1; then
+	                echo "[OK] RED"
+	                echo "Prueba de conectividad exitosa."
+	                echo "Pérdida de paquetes: 0%."
+	            else
+	                echo "[ADVERTENCIA] RED"
+	                echo "No fue posible realizar la prueba de conectividad."
+	                echo "Verifique la conexión a Internet."
+	            fi
+
+	            echo ""
+
+	            # -----------------------------------------
+	            # DIAGNOSTICO DE PROCESOS
+	            # -----------------------------------------
+	            proceso_cpu=$(ps -eo pid,comm,%cpu --sort=-%cpu | sed -n '2p')
+
+	            pid=$(echo "$proceso_cpu" | awk '{print $1}')
+	            nombre=$(echo "$proceso_cpu" | awk '{print $2}')
+	            cpu=$(echo "$proceso_cpu" | awk '{print $3}')
+
+	            # Comparar uso de CPU
+	            if awk "BEGIN {exit !($cpu > 80)}"; then
+	                echo "[ADVERTENCIA] PROCESOS"
+	                echo "Se detectó un proceso con alto consumo de CPU."
+	                echo "Proceso:"
+	                echo "PID: $pid"
+	                echo "Nombre: $nombre"
+	                echo "Uso de CPU: $cpu%"
+	            else
+	                echo "[OK] PROCESOS"
+	                echo "No se detectaron procesos con consumo elevado de CPU."
+	                echo "Proceso de mayor consumo:"
+	                echo "PID: $pid"
+	                echo "Nombre: $nombre"
+	                echo "Uso de CPU: $cpu%"
+	            fi
+
+	            echo ""
+	            echo "========================================="
+	            echo "       DIAGNÓSTICO FINALIZADO"
+	            echo "========================================="
+
+	            read -p "Presione ENTER para continuar..."
+	            ;;
 	0)
 		echo "Saliendo..."
 		exit 0
