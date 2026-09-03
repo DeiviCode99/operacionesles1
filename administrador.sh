@@ -4,7 +4,7 @@
 while true; do
     echo "========================================="
     echo "       SMART LINUX SYSTEM MONITOR"
-    echo "              Autor: Andres"
+    echo "     Autor: Steven Rey y David Zapata    "
     echo "========================================="
     echo "1. Información general del sistema"
     echo "2. Estado de memoria y disco"
@@ -99,12 +99,6 @@ while true; do
 		    else
 		        echo "Estado: ADVERTENCIA"
 		    fi
-
-		    echo ""
-		    echo "SISTEMAS OPERACIONALES"
-		    echo "INGENIERÍA DE SISTEMAS – UIS"
-		    echo "2026-2"
-		    echo "Diseñado por: Andrés Benavides Arévalo"
 
 		    echo ""
 		    read -p "Presione ENTER para continuar..."
@@ -271,12 +265,6 @@ while true; do
 	                echo ""
 	                echo "Total de archivos encontrados: $total"
 	            fi
-
-	            echo ""
-	            echo "SISTEMAS OPERACIONALES"
-	            echo "INGENIERÍA DE SISTEMAS – UIS"
-	            echo "2026-2"
-	            echo "Diseñado por: Andrés Benavides Arévalo"
 
 	            echo ""
 	            read -p "Presione ENTER para continuar..."
