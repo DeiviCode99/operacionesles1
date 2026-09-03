@@ -290,33 +290,7 @@ class App(tk.Tk):
             messagebox.showwarning("Aviso", "Seleccione un documento primero")
             return
         try:
-            with open(ruta, 'rb') as f:
-                contenido = f.read()
-
-            nombre = ruta.split('/')[-1].split('\\')[-1]
-            tamano = len(contenido)
-
-            # Verificar si es texto plano
-            try:
-                texto_contenido = contenido.decode('UTF-8')
-                es_texto = True
-            except UnicodeDecodeError:
-                es_texto = False
-
-            resultado = f"Archivo: {nombre}\n"
-            resultado += f"Tamano: {tamano} bytes\n"
-            resultado += f"Tipo: {'Texto plano' if es_texto else 'Binario'}\n"
-            resultado += f"Ruta: {ruta}\n"
-
-            if es_texto:
-                preview = texto_contenido[:500]
-                if len(texto_contenido) > 500:
-                    preview += "\n... (vista previa cortada en 500 caracteres)"
-                resultado += f"\n--- Vista previa ---\n{preview}"
-            else:
-                hex_preview = contenido[:32].hex()
-                hex_preview = " ".join([hex_preview[i:i+2] for i in range(0, len(hex_preview), 2)])
-                resultado += f"\n--- Primeros bytes (hex) ---\n{hex_preview.upper()}"
+            resultado = funciones.archive_analisis(ruta)
 
             self.resultado_documento.configure(state="normal")
             self.resultado_documento.delete("1.0", "end")
