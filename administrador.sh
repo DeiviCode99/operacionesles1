@@ -187,7 +187,7 @@ while true; do
 		                        echo "     INTERFACES Y DIRECCIONES IP"
 		                        echo "========================================="
 
-		                        ip a
+		                        ip addr
 
 		                        echo ""
 		                        read -p "Presione ENTER para continuar..."
